@@ -1,0 +1,13 @@
+this patch fixes a typo in upstream FAQ
+
+--- ipsec-tools-0.7.3.orig/src/racoon/doc/FAQ	2010-02-25 14:23:59.000000000 +0100
++++ ipsec-tools-0.7.3/src/racoon/doc/FAQ	2010-02-25 14:24:36.000000000 +0100
+@@ -18,7 +18,7 @@
+ 
+ A:
+ 	Configure both ends exactly the same.  With just a tiny little
+-	differnce, you will be in trouble.
++	difference, you will be in trouble.
+ 
+ Q: How to build racoon on my platform?
+ 

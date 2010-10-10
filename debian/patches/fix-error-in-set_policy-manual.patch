@@ -1,0 +1,13 @@
+This patch fixes an error in the ipsec_set_policy.3 manpage
+
+--- ipsec-tools-0.7.3.orig/src/libipsec/ipsec_set_policy.3	2010-02-23 00:42:13.000000000 +0100
++++ ipsec-tools-0.7.3/src/libipsec/ipsec_set_policy.3	2010-02-23 00:42:25.000000000 +0100
+@@ -128,7 +128,7 @@
+ .Ar {priority,prio} offset
+ .Xc
+ .Ar offset
+-is an integer in the range -2147483647..214783648.
++is an integer in the range \-2147483647..214783648.
+ .It Xo
+ .Ar {priority,prio} base {+,-} offset
+ .Xc
