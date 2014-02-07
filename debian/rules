@@ -1,31 +1,14 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-#
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
-#
-# Modified to make a template file for a multi-binary package with separated
-# build-arch and build-indep targets  by Bill Allombert 2001
 
-# Uncomment this to turn on verbose mode.
-export DH_VERBOSE=1
 export DEB_BUILD_HARDENING=1
-
-# This has to be exported to make some magic below work.
 export DH_OPTIONS
 
-include /usr/share/quilt/quilt.make
-
 # These are used for cross-compiling and for saving the configure script
-# from having to guess our platform (since we know it already)
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_HOST_ARCH   ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-
-CFLAGS = -Wall -g -fno-strict-aliasing -isystem /usr/include
+CFLAGS = -Wall -g -fno-strict-aliasing -isystem /usr/include -D_FORTIFY_SOURCE=2
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -O0
@@ -33,72 +16,65 @@ else
 	CFLAGS += -O2
 endif
 
-config.status: configure
-
-configure: $(QUILT_STAMPFN)
-	dh_testdir
-	# Add here commands to configure the package.
-	CFLAGS="$(CFLAGS)" ./configure --verbose --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --sysconfdir=/etc/racoon --libdir=/usr/lib/ipsec-tools --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info --localstatedir=/var/run --enable-shared --disable-static --enable-frag --enable-gssapi --enable-hybrid --enable-xauth  --enable-dpd --enable-adminport --enable-natt --with-kernel-headers=/usr/include --with-libpam --without-readline --disable-security-context
-
-#Architecture 
-build: build-arch build-indep
-
-build-arch: build-arch-stamp
-build-arch-stamp:  config.status
-
-	# Add here commands to compile the arch part of the package.
-	#$(MAKE) 
-	touch build-arch-stamp
-
-build-indep: build-indep-stamp
-build-indep-stamp:  config.status
-
-	# Add here commands to compile the indep part of the package.
-	#$(MAKE) doc
-	touch build-indep-stamp
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-arch-stamp build-indep-stamp #CONFIGURE-STAMP#
-
-	# Add here commands to clean up after the build process.
-	rm -f config.log
-	[ ! -f Makefile ] || $(MAKE) distclean
-#ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-#	cp -f /usr/share/misc/config.sub config.sub
-#endif
-#ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-#	cp -f /usr/share/misc/config.guess config.guess
+#NAT-T=--enable-natt
+#
+#ifeq '$(DEB_HOST_ARCH)' 'kfreebsd-amd64'
+#NAT-T=
 #endif
 
-	debconf-updatepo
-	dh_clean 
+#ifeq '$(DEB_HOST_ARCH)' 'kfreebsd-i386'
+#NAT-T=
+#endif
 
-install: install-indep install-arch
-install-indep:
-	# we have no indep packages
+%:
+	dh $@
 
-install-arch:
+patch:
+	quilt push -a
+
+unpatch:
+	quilt pop -a
+
+override_dh_auto_configure:
+	CFLAGS="$(CFLAGS)" ./configure --verbose \
+					--host=$(DEB_HOST_GNU_TYPE) \
+					--build=$(DEB_BUILD_GNU_TYPE) \
+					--prefix=/usr \
+					--sysconfdir=/etc/racoon \
+					--libdir=/usr/lib/ipsec-tools \
+					--mandir=\$${prefix}/share/man \
+					--infodir=\$${prefix}/share/info \
+					--localstatedir=/var/run \
+					--enable-shared \
+					--disable-static \
+					--enable-frag \
+					--enable-gssapi \
+					--enable-hybrid \
+					--with-libldap \
+					--enable-dpd \
+					--enable-adminport \
+					--with-kernel-headers=/usr/include \
+					--with-libpam \
+					--without-readline \
+					--disable-security-context \
+					--enable-natt
+
+override_dh_clean:
 	dh_testdir
-	dh_testroot
-	dh_prep 
-	dh_installdirs -s
+	dh_auto_clean
+	dh_clean
+	# Remove this after make clean as it upsets git-buildpackage
+	# make clean will invoke configure!!
+	- rm -f config.log
 
-	# Add here commands to install the arch part of the package into 
-	# debian/tmp.
-	$(MAKE) install DESTDIR=$(CURDIR)/debian/racoon
-
-	chrpath -r /usr/lib/ipsec-tools  debian/racoon/usr/lib/ipsec-tools/*.so.0.* \
-                   debian/racoon/usr/sbin/*
-	dh_movefiles -pipsec-tools --sourcedir=debian/racoon \
-	    usr/sbin/setkey usr/share/man/man8/setkey.8 \
-	    /usr/lib/ipsec-tools/libipsec.so.0 /usr/lib/ipsec-tools/libipsec.so.0.0.1
-	rm debian/racoon/usr/lib/ipsec-tools/*.so debian/racoon/usr/lib/ipsec-tools/*.la
-
+override_dh_install:
+	chrpath -r /usr/lib/ipsec-tools  debian/tmp/usr/lib/ipsec-tools/*.so.0.* \
+                   debian/tmp/usr/sbin/*
+	dh_install
 	mkdir -p debian/racoon/var/lib/racoon
 	install -m 755 -o root -g root debian/racoon-tool.pl \
 	    debian/racoon/usr/sbin/racoon-tool
+
 	install -D -m 600 -o root -g root src/racoon/samples/psk.txt.sample \
 	    debian/racoon/etc/racoon/psk.txt
 	install -m 644 -o root -g root  debian/racoon-tool.conf \
@@ -109,37 +85,21 @@ install-arch:
 	install -m 755 -o root -g root debian/ipsec-tools.conf \
             debian/ipsec-tools/etc/ipsec-tools.conf
 
-# Must not depend on anything. This is to be called by
-# binary-arch/binary-indep
-# in another 'make' thread.
-binary-arch: build-arch install-arch
-	dh_testdir
-	dh_testroot
+override_dh_installchangelogs:
 	dh_installchangelogs ChangeLog
-	dh_installdocs
-	dh_installexamples -pracoon src/racoon/samples
-	dh_installdebconf	
+
+override_dh_installexamples:
+	dh_installexamples -pracoon -X.in src/racoon/samples
+	dh_installexamples
+
+override_dh_installinit:
 	dh_installinit -R -pracoon -- start 40 S . stop 07 0 1 6 .
-	dh_installinit -R -pipsec-tools --name=setkey --no-start -- \
-	    start 14 S .
+	dh_installinit -R -pipsec-tools --name=setkey --no-start -- start 14 S .
+
+override_dh_installman:
+	dh_installman
 	dh_installman -pracoon debian/racoon-tool.8 debian/racoon-tool.conf.5
-	dh_link
-	dh_strip
-	dh_compress 
-	dh_fixperms
-	dh_perl
-	dpkg-gensymbols -pipsec-tools -esrc/libipsec/.libs/libipsec.so.0.0.1 -v0.7.3 -d -Odebian/ipsec-tools.symbols
-	dpkg-gensymbols -pracoon -esrc/racoon/.libs/libracoon.so.0.0.0 -v0.7.3 -d -Odebian/racoon.symbols
+
+override_dh_makeshlibs:
 	dh_makeshlibs -n
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
 
-# Build architecture independant packages using the common target.
-binary-indep: build-indep install-indep
-	# we have no architecture independant stuff yet
-
-binary: binary-arch binary-indep
-.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch 

@@ -1,3 +1,208 @@
+ipsec-tools (1:0.8.0-14) unstable; urgency=low
+
+  * Debconf templates and debian/control reviewed by the debian-l10n-
+    english team as part of the Smith review project.  Kudos to Christian 
+    Perrier <bubulle@debian.org> for organising this.  Closes: #677713
+  * [Debconf translation updates]
+  * Russian (Yuri Kozlov).  Closes: #679732
+  * Italian (Luca Monducci).  Closes: #679743
+  * Slovak (Ivan Masár).  Closes: #679808
+  * Danish (Joe Hansen).  Closes: #680068
+  * Portuguese (Américo Monteiro).  Closes: #680131
+  * German (Erik Pfannenstein).  Closes: #680295
+  * French (Jean-Christope GARNIER).  Closes: #680270
+  * Czech (Miroslav Kure).  Closes: #680471
+  * Polish (Michał Kułach).  Closes: #680526
+  * Swedish (Martin Bagge / brother).  Closes: #680560
+  * Spanish (Javier Fernández-Sanguino). Last in the gate. Added by 
+    Maintainer.  Closes: #681400
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Sun, 15 Jul 2012 21:13:32 +1200
+
+ipsec-tools (1:0.8.0-13) unstable; urgency=low
+
+  * Set CFLAGS _FORTIFY_SOURCE=2 cf 0 (Closes: #679481)
+  * Make peer_sertfile dnssec DNSSEC validate on linux (Closes: #679483)
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Fri, 29 Jun 2012 22:22:51 +1200
+
+ipsec-tools (1:0.8.0-12) unstable; urgency=low
+
+  * racoon - add adduser dependency (Closes:  #677572)
+  * Fix racoon debconf template.
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Fri, 15 Jun 2012 11:33:48 +1200
+
+ipsec-tools (1:0.8.0-11) unstable; urgency=low
+
+  * Update racoon-tool to 0.1.5 to fix proposal bug and add privsep support.
+  * Make racoon init return 0 when already started (Closes: #666913)
+  * Remove set -e from racoon init (Closes: #666912)
+  * Update debconf and README.Debian re X509 and racoon-tool.
+  * Update package format to 3.9.3
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Wed, 13 Jun 2012 16:39:18 +1200
+
+ipsec-tools (1:0.8.0-10) unstable; urgency=low
+
+  * Correctly close bugs related to Debian GNU/kfreebsd build failures.
+    Bugs #617859 and #639970 reopened. (Closes: #619687, #643570) 
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Sun, 16 Oct 2011 11:43:09 +1300
+
+ipsec-tools (1:0.8.0-9) unstable; urgency=low
+
+  * Apply new patchs which enable GNU/kfreebsd build.
+    Thanks to Mats Erik Andersson. (Closes: #617859, #639970)
+  * Put removing of config.log at end of dh_clean to stop file changed
+    problems during git-buildpackage
+  * Fix lots of minor lintian warnings.
+  * LSB-fy init scripts. (Closes: #629828)
+  * Fix spelling error in racoon.conf.5 manpage.
+  * Fix typo in libipsec_strerror.h (Closes: #642926)
+  * Updated racoon-tool.conf.5 manpage, minor regexps.
+  * New racoon-tool, Multi relation SPD code.
+  * debian/control: Add Vcs-* stanzas.
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Sat, 08 Oct 2011 16:30:22 +1300
+
+ipsec-tools (1:0.8.0-8) unstable; urgency=low
+
+  * Revert racoon-tool default SPD level to unique for comaptibilty and 
+    individual VPN reload speed.
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Wed, 28 Sep 2011 12:12:12 +1300
+
+ipsec-tools (1:0.8.0-7) unstable; urgency=low
+
+  * Temporarily fix gcc-4.6 build on most architectures. Need to contact 
+    upstream about proper use of autoconf and configure.ac for gcc-4.6 support
+    as autoconf  for this package appears to be brittle. 
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Wed, 28 Sep 2011 10:09:20 +1300
+
+ipsec-tools (1:0.8.0-6) unstable; urgency=low
+
+  * Remove Requires-Stop $remotefs from init script. (Closes: #643006) 
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Tue, 27 Sep 2011 07:51:09 +1300
+
+ipsec-tools (1:0.8.0-5.1) unstable; urgency=low
+
+  * Minor version to kick over reprepro 
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Mon, 26 Sep 2011 10:58:05 +1300
+
+ipsec-tools (1:0.8.0-5) unstable; urgency=low
+
+  * Fix required-stop $remotefs with lintian override as otherwise causes 
+    dependency boot order loops sith sendsigs.
+  * Add racoon-tool match code for udp port 500 traffic.
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Mon, 26 Sep 2011 10:52:50 +1300
+
+ipsec-tools (1:0.8.0-4.1) unstable; urgency=low
+
+  * Update raccon-tool transport mode to ignore dup port 500 <-> 500 traffic.
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Mon, 26 Sep 2011 10:19:19 +1300
+
+ipsec-tools (1:0.8.0-4) unstable; urgency=low
+
+  * New Maintainer.  Have conferred with Stefan Bauer.
+  * Changed to gcc-4.5 only as 4.6 does not support -R flag that ipsec-tools
+    requires. (Closes: #625184)
+  * Marked automake, autoconf, and autoheader as Build-Conflicts.
+  * Added updated racoon-tool.pl and associated manpages.
+
+ -- Matthew Grant <matthewgrant5@gmail.com>  Sun, 25 Sep 2011 17:41:02 +1300
+
+ipsec-tools (1:0.8.0-3) unstable; urgency=low
+
+  * Apply patch from Mats Erik Andersson to fix build problems on *BSD
+    This patch also addresses nat-t related issues for this arch
+
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Fri, 25 Mar 2011 12:29:19 +0100
+
+ipsec-tools (1:0.8.0-2) unstable; urgency=low
+
+  * Skip dependency on libssl-dev and move back to libssl-dev (>= 0.9.6) to
+    provide an update to unstable. This will temporary remove the support for 
+    camellia encryption algorithm until libssl-dev 1.x enters unstable
+
+  * Adjust racoon-init-script (Closes: #619151)
+  * Apply patch to fix build problems on *BSD
+    Thanks to Mats Erik Andersson
+
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Wed, 23 Mar 2011 11:44:33 +0100
+
+ipsec-tools (1:0.8.0-1) experimental; urgency=low
+
+  * New upstream release 
+        o Fix authentication method ambiguity with kerberos and xauth
+        o RFC2253 compliant escaping of asn1dn identifiers (Cyrus Rahman)
+        o Local address code rewrite to speed things up
+        o Improved MIPv6 support (Arnaud Ebalard)
+        o ISAKMP SA (phase1) rekeying
+        o Improved scheduler (faster algorithm, support monotonic clock)
+        o Handle RESPONDER-LIFETIME in quick mode
+        o Handle INITIAL-CONTACT in from main mode too
+        o Rewritten event handling framework for admin port
+        o Ability to initiate IPsec SA through admin port
+        o NAT-T Original Address handling (transport mode NAT-T support)
+        o clean NAT-T - PFkey support
+        o support for multiple anonymous remoteconfs
+        o Remove various obsolete configuration options
+        o A lot of other bug fixes, performance improvements and clean ups
+ 
+   * Remove patches as they are now part of upstream release
+
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Mon, 21 Mar 2011 10:52:37 +0100
+
+ipsec-tools (1:0.7.3-18) experimental; urgency=low
+
+  * Lower the log level for racoon to notify to keep syslog clear
+  * Reupload because build dir was tainted
+  * Skip --enable-xauth on build, as this is covered by --enable-hybrid
+ 
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Fri, 11 Mar 2011 09:16:43 +0100
+
+ipsec-tools (1:0.7.3-16) experimental; urgency=low
+
+  * Adjust racoon init-script to handle the start with kFreeBSD kernel
+    as well. Thanks to Mats Erik Andersson (Closes: #613726) 
+
+  * Enable --with-libldap at build time
+ 
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Mon, 28 Feb 2011 13:21:18 +0100
+
+ipsec-tools (1:0.7.3-15) experimental; urgency=low
+
+  * Fix build problems on *bsd (Closes: #612676)
+  * Include configuration example to tunnel with OpenBSD (Closes: #612448)
+    Thanks to Mats Erik Andersson
+
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Thu, 10 Feb 2011 11:11:53 +0100
+
+ipsec-tools (1:0.7.3-14) experimental; urgency=low
+
+  * Fix build problems on *bsd
+  * Include converter for plainrsa to pem file format (Closes: #612021)
+
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Sat, 05 Feb 2011 11:56:25 +0100
+
+ipsec-tools (1:0.7.3-13) experimental; urgency=low
+
+  * Switch to dpkg-source 3.0 (quilt) format
+  * Fix typo in README-file
+  * Bump Standards to 3.9.1
+  * Include /usr/share/common-licenses/BSD in packages copyright file
+    as base-files might drop the licenses in future versions
+  * Added support for camellia encryption algorithm
+  * Ship /etc/ipsec-tools.d/ with the package (Closes: #598426) 
+
+ -- Stefan Bauer <stefan.bauer@cubewerk.de>  Wed, 26 Jan 2011 15:26:30 +0100
+
 ipsec-tools (1:0.7.3-12) unstable; urgency=low
 
   * Extend racoon init-script to start after setkey (Closes: #599529)
