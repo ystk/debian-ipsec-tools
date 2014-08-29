@@ -4,43 +4,45 @@ Description: Always pass -Wl,-Rxyz rather than just -Rxyz
 Author: Serge Hallyn <serge.hallyn@ubuntu.com>
 Origin: serge.hallyn@ubuntu.com
 Forwarded: no
-Last-Update: 2011-06-08
+Last-Update: 2014-06-28
 
---- ipsec-tools-0.8.0.orig/configure
-+++ ipsec-tools-0.8.0/configure
-@@ -13076,7 +13076,7 @@ fi
- 			as_fn_error $? "ICONV libs or includes not found. Aborting." "$LINENO" 5
+Index: pkg-ipsec-tools/configure.ac
+===================================================================
+--- pkg-ipsec-tools.orig/configure.ac	2014-06-29 15:01:30.312814492 +0200
++++ pkg-ipsec-tools/configure.ac	2014-06-29 15:01:30.308814497 +0200
+@@ -322,7 +322,7 @@ if test "$libiconv_dir" != "no"; then
+ 			AC_MSG_ERROR([ICONV libs or includes not found. Aborting.])
  	  	fi
  	fi
 -	LIBS="$LIBS -L$libiconv_dir/lib -R$libiconv_dir/lib -liconv"
-+	LIBS="$LIBS -L$libiconv_dir/lib -Wl,-R$libiconv_dir/lib -liconv"
- 	for ac_func in iconv_open
- do :
-   ac_fn_c_check_func "$LINENO" "iconv_open" "ac_cv_func_iconv_open"
-@@ -13333,7 +13333,7 @@ fi
++	LIBS="$LIBS -liconv"
+ 	AC_CHECK_FUNCS(iconv_open)
+ fi
  
- $as_echo "#define HAVE_LIBRADIUS /**/" >>confdefs.h
- 
+@@ -386,7 +386,7 @@ if test "$libradius_dir" != "no"; then
+ 	  	fi
+ 	fi
+ 	AC_DEFINE([HAVE_LIBRADIUS], [], [Hybrid authentication uses RADIUS])
 -	LIBS="$LIBS -L$libradius_dir/lib -R$libradius_dir/lib -lradius"
-+	LIBS="$LIBS -L$libradius_dir/lib -Wl,-R$libradius_dir/lib -lradius"
- 	for ac_func in rad_create_request
- do :
-   ac_fn_c_check_func "$LINENO" "rad_create_request" "ac_cv_func_rad_create_request"
-@@ -13536,7 +13536,7 @@ fi
++	LIBS="$LIBS -lradius"
+ 	AC_CHECK_FUNCS(rad_create_request)
+ fi
  
- $as_echo "#define HAVE_LIBPAM /**/" >>confdefs.h
- 
+@@ -412,7 +412,7 @@ if test "$libpam_dir" != "no"; then
+ 	  	fi
+ 	fi
+ 	AC_DEFINE([HAVE_LIBPAM], [], [Hybrid authentication uses PAM])
 -	LIBS="$LIBS -L$libpam_dir/lib -R$libpam_dir/lib -lpam"
-+	LIBS="$LIBS -L$libpam_dir/lib -Wl,-R$libpam_dir/lib -lpam"
- 	for ac_func in pam_start
- do :
-   ac_fn_c_check_func "$LINENO" "pam_start" "ac_cv_func_pam_start"
-@@ -13739,7 +13739,7 @@ fi
++	LIBS="$LIBS -lpam"
+ 	AC_CHECK_FUNCS(pam_start)
+ fi
  
- $as_echo "#define HAVE_LIBLDAP /**/" >>confdefs.h
- 
+@@ -438,7 +438,7 @@ if test "$libldap_dir" != "no"; then
+ 	  	fi
+ 	fi
+ 	AC_DEFINE([HAVE_LIBLDAP], [], [Hybrid authentication uses LDAP])
 -	LIBS="$LIBS -L$libldap_dir/lib -R$libldap_dir/lib -lldap"
-+	LIBS="$LIBS -L$libldap_dir/lib -Wl,-R$libldap_dir/lib -lldap"
++	LIBS="$LIBS -lldap"
  
  	saved_CFLAGS=$CFLAGS
  	CFLAGS="$CFLAGS -Wall -Werror"

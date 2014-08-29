@@ -1,3 +1,74 @@
+ipsec-tools (1:0.8.2+20140711-1) unstable; urgency=medium
+
+  * Repackage upstream release 0.8.2 for real. Previous releases were
+    based on an incomplete import and were essentially 0.8.0.
+  * Remove patch debian/patches/gcc-4.8.diff, which has been incorportated
+    upstream.
+  * Remove patch debian/patches/patch-to-support-cast128, which has
+    been incorportated upstream.
+  * Import patch for x509 IPv6 literal address subjectAltName support from
+    Adam Majer <adamm@zombino.com> (Closes: #738573)
+
+ -- Noah Meyerhans <noahm@debian.org>  Fri, 11 Jul 2014 00:52:38 -0700
+
+ipsec-tools (1:0.8.2-4) unstable; urgency=medium
+
+  * Fix newly introduced FTBFS on kFreeBSD.
+    The previous patch defined __USE_GNU in a fragile way, but as we're
+    really on a glibc platform, we can just define _GNU_SOURCE, similar
+    to what is done on Linux.
+  * Refresh patch "configure-pass-Wl-with-R"
+
+ -- Christian Hofstaedtler <zeha@debian.org>  Sun, 29 Jun 2014 15:08:07 +0200
+
+ipsec-tools (1:0.8.2-3) unstable; urgency=medium
+
+  * Update patch gcc-4.8.diff.
+    As per NetBSD CVS, the memset is unneeded after (racoon_)calloc().
+  * Support building with automake 1.14.
+    Set required options to restore old automake behavior, and run
+    autoreconf during build. Removed patches to configure, removed
+    explicit rpath setting and chrpath. Dropped superfluous symbols
+    files, as we are not a library package and these were probably
+    added by accident.
+  * Only use UTF8 encoding in ASN.1 strings.
+    This is recommended by RFC2459 (2004), and has been made the default in
+    OpenSSL 1.0.1h. Fixes the FTBFS caused by the OpenSSL change.
+    (Closes: #752946)
+  * Add myself to Uploaders
+  * Set Vcs-Git to a git:// URL
+
+ -- Christian Hofstaedtler <zeha@debian.org>  Sat, 28 Jun 2014 18:15:39 +0200
+
+ipsec-tools (1:0.8.2-2) unstable; urgency=low
+
+  * Fix FTBFS on kfreebsd.
+
+ -- Noah Meyerhans <noahm@debian.org>  Thu, 08 May 2014 23:58:14 -0700
+
+ipsec-tools (1:0.8.2-1) unstable; urgency=medium
+
+  * New upstream release 0.8.2
+  * Add a systemd unit file for racoon.
+  * Update maintainer and VCS details in debian/control.
+  * Update standards compliance to 3.9.5 (no changes)
+  * Update config.{sub,guess} (Closes: 727294)
+  * Add dependency on lsb-base for /lib/lsb/init-functions (Closes: 695074)
+  * Update Dutch debconf translation (Closes: #692817)
+  * Update Japanese debconf translation (Closes: #715193)
+
+ -- Noah Meyerhans <noahm@debian.org>  Sun, 27 Apr 2014 22:40:37 -0700
+
+ipsec-tools (1:0.8.0-14.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix "ftbfs with GCC-4.8":
+    add patch from Ubuntu / Matthias Klose, which dereferences argument to
+    'sizeof' in 'memset'
+    (Closes: #701299)
+
+ -- gregor herrmann <gregoa@debian.org>  Sat, 23 Nov 2013 20:39:37 +0100
+
 ipsec-tools (1:0.8.0-14) unstable; urgency=low
 
   * Debconf templates and debian/control reviewed by the debian-l10n-

@@ -27,7 +27,7 @@ endif
 #endif
 
 %:
-	dh $@
+	dh $@ --with autoreconf
 
 patch:
 	quilt push -a
@@ -68,8 +68,6 @@ override_dh_clean:
 	- rm -f config.log
 
 override_dh_install:
-	chrpath -r /usr/lib/ipsec-tools  debian/tmp/usr/lib/ipsec-tools/*.so.0.* \
-                   debian/tmp/usr/sbin/*
 	dh_install
 	mkdir -p debian/racoon/var/lib/racoon
 	install -m 755 -o root -g root debian/racoon-tool.pl \
@@ -95,6 +93,7 @@ override_dh_installexamples:
 override_dh_installinit:
 	dh_installinit -R -pracoon -- start 40 S . stop 07 0 1 6 .
 	dh_installinit -R -pipsec-tools --name=setkey --no-start -- start 14 S .
+	dh_systemd_enable -pracoon
 
 override_dh_installman:
 	dh_installman
