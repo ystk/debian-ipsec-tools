@@ -1,3 +1,12 @@
+ipsec-tools (1:0.8.2+20140711-2+deb8u1) jessie-security; urgency=high
+
+  * Non-maintainer upload by the Security Team.
+  * Add bug785778-null-pointer-deref.patch patch.
+    CVE-2015-4047: Fix NULL pointer dereference in racoon in gssapi.c
+    leading to a possible crash and denial of service attack. (Closes: #785778)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Fri, 22 May 2015 09:59:27 +0200
+
 ipsec-tools (1:0.8.2+20140711-2) unstable; urgency=low
 
   * Stop using hardening-wrapper
