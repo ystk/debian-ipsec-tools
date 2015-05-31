@@ -1,3 +1,12 @@
+ipsec-tools (1:0.7.3-12+deb6u1) squeeze-lts; urgency=high
+
+  * Non-maintainer upload.
+  * Add bug785778-null-pointer-deref.patch patch.
+    CVE-2015-4047: Fix NULL pointer dereference in racoon in gssapi.c
+    leading to a possible crash and denial of service attack. (Closes: #785778)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sun, 24 May 2015 19:28:09 +0200
+
 ipsec-tools (1:0.7.3-12) unstable; urgency=low
 
   * Extend racoon init-script to start after setkey (Closes: #599529)

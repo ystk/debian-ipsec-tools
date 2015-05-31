@@ -9,3 +9,4 @@ fix-several-formating-errors-in-setkey-manpage.patch
 modify-makefile-to-let-initscript-create-var-run-directory.patch
 fix-typo-in-manpage.patch
 support-iphone-os-main-mode-with-psk.patch
+bug785778-null-pointer-deref.patch
